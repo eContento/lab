@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabla Periódica</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <h1 class="site-title">Tabla Periódica de los Elementos</h1>
+    <div class="header-controls">
+      <div class="search-wrapper">
+        <input type="search" id="search" class="search-input"
+               placeholder="Nombre, símbolo o número atómico..."
+               autocomplete="off" spellcheck="false">
+        <button id="clear-search" class="btn-icon btn-clear" aria-label="Limpiar búsqueda" hidden>✕</button>
+      </div>
+      <button id="theme-toggle" class="btn-icon btn-theme" aria-label="Cambiar tema">
+        <span class="icon-light">☀</span>
+        <span class="icon-dark">☽</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="site-main">
+
+    <div class="table-area">
+      <div class="table-scroll">
+        <div id="periodic-table" class="periodic-table" role="grid" aria-label="Tabla periódica"></div>
+        <p id="no-results" class="no-results" hidden>No se encontraron elementos</p>
+      </div>
+      <div id="legend" class="legend" aria-label="Leyenda de categorías"></div>
+    </div>
+
+    <aside id="detail-panel" class="detail-panel" aria-label="Detalle del elemento" hidden>
+      <button id="close-detail" class="btn-close" aria-label="Cerrar detalle">✕</button>
+      <div class="detail-header">
+        <div id="d-atomic-number" class="d-atomic-number"></div>
+        <div id="d-symbol" class="d-symbol"></div>
+        <div class="detail-name-area">
+          <h2 id="d-name" class="d-name"></h2>
+          <span id="d-category-badge" class="d-category-badge"></span>
+        </div>
+      </div>
+      <table class="detail-table">
+        <tbody>
+          <tr>
+            <th>Masa atómica</th>
+            <td id="d-mass"></td>
+          </tr>
+          <tr>
+            <th>Período / Grupo</th>
+            <td id="d-period-group"></td>
+          </tr>
+          <tr>
+            <th>Config. electrónica</th>
+            <td id="d-config" class="d-config"></td>
+          </tr>
+          <tr>
+            <th>Estado estándar</th>
+            <td id="d-state"></td>
+          </tr>
+          <tr>
+            <th>Punto de fusión</th>
+            <td id="d-melting"></td>
+          </tr>
+          <tr>
+            <th>Punto de ebullición</th>
+            <td id="d-boiling"></td>
+          </tr>
+        </tbody>
+      </table>
+      <p id="d-summary" class="d-summary"></p>
+    </aside>
+
+  </main>
+
+  <div id="panel-backdrop" class="panel-backdrop" hidden></div>
+
+  <script src="elements.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
