@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabla Periódica de los Elementos</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Anti-FOUC: aplica el tema antes del primer render -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-brand">
+      <h1>Tabla Periódica de los Elementos</h1>
+    </div>
+    <div class="search-box">
+      <input type="search" id="search"
+             placeholder="Buscar por nombre, símbolo o número atómico…"
+             autocomplete="off" spellcheck="false">
+    </div>
+    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema">
+      🌙 Oscuro
+    </button>
+  </header>
+
+  <div class="page-layout">
+
+    <!-- Área de la tabla periódica -->
+    <div class="table-area">
+      <div id="group-header" class="group-header"></div>
+      <div id="main-table" class="table-grid"></div>
+      <div class="f-block-sep" aria-hidden="true"></div>
+      <div id="f-block" class="f-block-grid"></div>
+    </div>
+
+    <!-- Panel de detalles (solo visible cuando hay un elemento seleccionado) -->
+    <aside id="detail-panel" class="detail-panel">
+      <div id="panel-content" class="panel-content" hidden>
+        <div class="panel-header">
+          <button id="btn-close" class="close-btn" title="Cerrar">✕</button>
+          <div class="panel-number" id="d-number"></div>
+          <div class="panel-symbol" id="d-symbol"></div>
+          <div class="panel-name"   id="d-name"></div>
+        </div>
+
+        <dl class="panel-body">
+          <dt>Masa atómica</dt>
+          <dd id="d-mass"></dd>
+
+          <dt>Categoría</dt>
+          <dd id="d-category"></dd>
+
+          <dt>Periodo</dt>
+          <dd id="d-period"></dd>
+
+          <dt>Grupo</dt>
+          <dd id="d-group"></dd>
+
+          <dt>Config. electrónica</dt>
+          <dd id="d-config"></dd>
+
+          <dt>Electronegatividad</dt>
+          <dd id="d-en"></dd>
+
+          <dt>Estado físico (25 °C)</dt>
+          <dd id="d-state"></dd>
+        </dl>
+      </div>
+    </aside>
+
+  </div><!-- .page-layout -->
+
+  <footer class="site-footer">
+    <div id="legend" class="legend"></div>
+  </footer>
+
+  <script src="data/elements.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

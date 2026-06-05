@@ -547,3 +547,36 @@ body {
   .search-input { width: 180px; font-size: .8rem; }
   .table-area { padding: .75rem; }
 }
+
+/* Block colours (block-s/p/d/f/g) */
+
+:root {
+  --block-s: #f97316;
+  --block-p: #ec4899;
+  --block-d: #3b82f6;
+  --block-f: #84cc16;
+  --block-g: #d1d5db;
+}
+
+[data-theme="dark"] {
+  --block-s: #ea6a07;
+  --block-p: #d63384;
+  --block-d: #2563eb;
+  --block-f: #65a30d;
+  --block-g: #6b7280;
+}
+
+/* Period divide */
+.period-divide-label {
+  font-size: 6px;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+  font-style: italic;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.period-divide-line {
+  stroke: var(--border-default);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}

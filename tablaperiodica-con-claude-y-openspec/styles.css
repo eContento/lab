@@ -1,0 +1,466 @@
+/* ============================================================
+   Variables y reset
+   ============================================================ */
+:root {
+  --cell-w: 56px;
+  --cell-h: 64px;
+  --cell-gap: 2px;
+  --panel-w: 300px;
+  --page-bg: #f4f6f8;
+  --card-bg: #ffffff;
+  --header-bg: #ffffff;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --text-main: #1a1a2e;
+  --text-muted: #6b7280;
+  --search-bg: #f1f5f9;
+
+  /* Texto de celdas (modo claro) */
+  --cell-symbol-color: #1a1a2e;
+  --cell-number-color: rgba(0, 0, 0, 0.50);
+  --cell-name-color:   rgba(0, 0, 0, 0.60);
+  --cell-border-color: rgba(0, 0, 0, 0.10);
+
+  /* Colores pastel por categoría */
+  --c-alkali-metal:    #ffc8c8;
+  --c-alkaline-earth:  #ffe0b0;
+  --c-transition-metal:#b8d8ff;
+  --c-post-transition: #b8f0cc;
+  --c-metalloid:       #fff0a0;
+  --c-nonmetal:        #ccf5b0;
+  --c-halogen:         #e8c0ff;
+  --c-noble-gas:       #b0eeff;
+  --c-lanthanide:      #ffd4a8;
+  --c-actinide:        #d0b8ff;
+  --c-unknown:         #e4e4e4;
+}
+
+/* ============================================================
+   Tema oscuro — redefine las mismas variables bajo data-theme="dark"
+   ============================================================ */
+html[data-theme="dark"] {
+  --page-bg: #0f0f1a;
+  --card-bg: #1a1a2e;
+  --header-bg: #12122a;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --text-main: #e8e8f0;
+  --text-muted: #9090a8;
+  --search-bg: #1e1e38;
+
+  /* Pastel oscuros: misma hue, menos luminosidad, más saturación */
+  --c-alkali-metal:    #8b3a3a;
+  --c-alkaline-earth:  #7a5428;
+  --c-transition-metal:#2a4a7a;
+  --c-post-transition: #1e6644;
+  --c-metalloid:       #6a6020;
+  --c-nonmetal:        #3a6620;
+  --c-halogen:         #5a2e7a;
+  --c-noble-gas:       #1a5a78;
+  --c-lanthanide:      #7a4a20;
+  --c-actinide:        #4a2e7a;
+  --c-unknown:         #2e2e3e;
+
+  /* Texto de celdas en modo oscuro */
+  --cell-symbol-color: #f0f0fa;
+  --cell-number-color: rgba(255, 255, 255, 0.55);
+  --cell-name-color:   rgba(255, 255, 255, 0.70);
+  --cell-border-color: rgba(255, 255, 255, 0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--page-bg);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+/* ============================================================
+   Asignación de color por categoría (reutilizable en celdas,
+   panel y leyenda mediante la variable --cat-color)
+   ============================================================ */
+.cat-alkali-metal    { --cat-color: var(--c-alkali-metal); }
+.cat-alkaline-earth  { --cat-color: var(--c-alkaline-earth); }
+.cat-transition-metal{ --cat-color: var(--c-transition-metal); }
+.cat-post-transition { --cat-color: var(--c-post-transition); }
+.cat-metalloid       { --cat-color: var(--c-metalloid); }
+.cat-nonmetal        { --cat-color: var(--c-nonmetal); }
+.cat-halogen         { --cat-color: var(--c-halogen); }
+.cat-noble-gas       { --cat-color: var(--c-noble-gas); }
+.cat-lanthanide      { --cat-color: var(--c-lanthanide); }
+.cat-actinide        { --cat-color: var(--c-actinide); }
+.cat-unknown         { --cat-color: var(--c-unknown); }
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.header-brand h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 220px;
+  max-width: 380px;
+}
+
+#search {
+  width: 100%;
+  padding: 8px 14px 8px 36px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 24px;
+  background: var(--search-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 10px center;
+  font-size: 14px;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#search:focus {
+  border-color: #6b9fce;
+  background-color: var(--card-bg);
+}
+
+.theme-toggle-btn {
+  padding: 7px 14px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 20px;
+  background: var(--search-bg);
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--card-bg);
+  border-color: var(--text-muted);
+}
+
+/* ============================================================
+   Page layout: tabla (fluida) + panel (fijo)
+   ============================================================ */
+.page-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
+  padding: 20px 24px;
+}
+
+.page-layout.panel-open {
+  grid-template-columns: minmax(0, 1fr) var(--panel-w);
+}
+
+/* La tabla hace scroll horizontal si la ventana es estrecha */
+.table-area {
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+/* ============================================================
+   Cabecera de grupos (números 1-18)
+   ============================================================ */
+.group-header {
+  display: grid;
+  grid-template-columns: repeat(18, var(--cell-w));
+  gap: var(--cell-gap);
+  margin-bottom: 4px;
+}
+
+.group-label {
+  text-align: center;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 14px;
+  height: 14px;
+}
+
+/* ============================================================
+   Tabla periódica principal (18 columnas, posición explícita)
+   ============================================================ */
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(18, var(--cell-w));
+  gap: var(--cell-gap);
+}
+
+/* ============================================================
+   Separador entre tabla y bloque f (≥ 1 fila de espacio)
+   ============================================================ */
+.f-block-sep {
+  height: calc(var(--cell-h) + var(--cell-gap) * 2);
+}
+
+/* ============================================================
+   Bloque f (lantánidos/actínidos) - grid de 16 columnas
+   Columna 1: etiqueta de serie (ancho = 2 celdas + 1 gap)
+   Columnas 2-16: 15 elementos
+   La col 1 mide calc(2*56px + 2px)=114px para alinear col 2
+   con el grupo 3 de la tabla principal.
+   ============================================================ */
+.f-block-grid {
+  display: grid;
+  grid-template-columns: calc(2 * var(--cell-w) + var(--cell-gap)) repeat(15, var(--cell-w));
+  gap: var(--cell-gap);
+}
+
+.fblock-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  height: var(--cell-h);
+}
+
+/* ============================================================
+   Celda de elemento
+   ============================================================ */
+.element-cell {
+  width: var(--cell-w);
+  height: var(--cell-h);
+  background-color: var(--cat-color, #eee);
+  border: 1px solid var(--cell-border-color);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 3px 4px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.18s ease;
+  position: relative;
+  user-select: none;
+}
+
+.element-cell:hover {
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  z-index: 5;
+}
+
+.element-cell.selected {
+  outline: 2.5px solid var(--text-main);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 4px rgba(128,128,160,0.25);
+  z-index: 6;
+}
+
+.element-cell.dimmed {
+  opacity: 0.12;
+}
+
+.element-cell.placeholder {
+  cursor: default;
+  opacity: 0.75;
+}
+
+.element-cell.placeholder:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.el-number {
+  font-size: 9px;
+  color: var(--cell-number-color);
+  align-self: flex-start;
+  line-height: 1;
+}
+
+.el-symbol {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cell-symbol-color);
+}
+
+.el-name {
+  font-size: 7px;
+  color: var(--cell-name-color);
+  text-align: center;
+  line-height: 1.1;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   Panel de detalles (solo aparece en el layout cuando .panel-open)
+   ============================================================ */
+.detail-panel {
+  display: none;
+  width: var(--panel-w);
+  background: var(--card-bg);
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.09);
+  overflow: hidden;
+  position: sticky;
+  top: 74px; /* debajo del header fijo */
+}
+
+.page-layout.panel-open .detail-panel {
+  display: block;
+}
+
+/* Cabecera del panel (con color de la categoría) */
+.panel-header {
+  background-color: var(--cat-color, #e8e8e8);
+  padding: 20px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.12);
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.close-btn:hover {
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.panel-number {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.panel-symbol {
+  font-size: 58px;
+  font-weight: 800;
+  line-height: 1;
+  color: #1a1a2e;
+}
+
+.panel-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  margin-top: 2px;
+}
+
+/* Cuerpo del panel con la tabla de propiedades */
+.panel-body {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  gap: 0;
+  padding: 0;
+}
+
+.panel-body dt,
+.panel-body dd {
+  padding: 9px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.panel-body dt {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+}
+
+.panel-body dd {
+  color: var(--text-main);
+  font-weight: 500;
+  word-break: break-all;
+}
+
+/* La config electrónica ocupa las dos columnas */
+.panel-body dt.full,
+.panel-body dd.full {
+  grid-column: 1 / -1;
+}
+
+/* ============================================================
+   Footer y leyenda
+   ============================================================ */
+.site-footer {
+  padding: 20px 24px 32px;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 16px 20px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.legend-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background-color: var(--cat-color, #eee);
+  border: 1px solid rgba(0,0,0,0.10);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   Responsive básico
+   ============================================================ */
+@media (max-width: 900px) {
+  .page-layout.panel-open {
+    grid-template-columns: 1fr;
+  }
+  .detail-panel {
+    width: 100%;
+    position: static;
+  }
+}

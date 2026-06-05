@@ -35,6 +35,7 @@ const $legend      = document.getElementById('legend');
 const $panel       = document.getElementById('detail-panel');
 const $backdrop    = document.getElementById('panel-backdrop');
 const $closeBtn    = document.getElementById('close-detail');
+const $tableArea   = document.querySelector('.table-area');
 
 /* ── Render Table ──────────────────────────────────────────────── */
 
@@ -170,7 +171,7 @@ function normalize(str) {
 
 function filterElements(query) {
   const q = normalize(query.trim());
-  const cells = $table.querySelectorAll('.element-cell');
+  const cells = document.querySelectorAll('.element-cell');
   let matchCount = 0;
 
   if (!q) {
