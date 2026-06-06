@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabla Periódica</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="header-row">
+  <h1>Tabla Periódica de los Elementos</h1>
+  <button id="theme-toggle">🌙</button>
+</div>
+<div class="search-wrapper">
+  <input type="text" id="search" placeholder="Buscar por nombre, símbolo o número…" autofocus>
+</div>
+<div id="table-wrapper">
+  <div id="periodic-table"></div>
+</div>
+<div id="no-results">No se encontraron elementos</div>
+<div id="detail-backdrop"></div>
+<div id="detail-panel"></div>
+
+<script src="elements.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
