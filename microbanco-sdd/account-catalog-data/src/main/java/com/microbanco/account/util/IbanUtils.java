@@ -1,23 +1,38 @@
 package com.microbanco.account.util;
 
 import java.math.BigInteger;
-import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class IbanUtils {
 
     private static final int IBAN_LENGTH_ES = 24;
     private static final String COUNTRY_CODE = "ES";
+    private static final String ENTITY_PREFIX = "00830001";
     private static final BigInteger MODULUS = BigInteger.valueOf(97);
     private static final BigInteger CHECK_VALUE = BigInteger.valueOf(98);
 
     private IbanUtils() {}
 
     public static String generateIban() {
-        String uuidBase = UUID.randomUUID().toString().replace("-", "").toUpperCase();
-        String accountPart = uuidBase.substring(0, 20);
+        StringBuilder sb = new StringBuilder(12);
+        for (int i = 0; i < 12; i++) {
+            sb.append(ThreadLocalRandom.current().nextInt(10));
+        }
+        String accountPart = ENTITY_PREFIX + sb;
         String partialIban = COUNTRY_CODE + "00" + accountPart;
         int checkDigits = calculateCheckDigits(partialIban);
         return COUNTRY_CODE + String.format("%02d", checkDigits) + accountPart;
+    }
+
+    public static boolean isEntityAccount(String iban) {
+        if (iban == null || iban.length() < 4) return false;
+        return iban.substring(4).startsWith(ENTITY_PREFIX);
+    }
+
+    public static String generateIbanFromBban(String bban) {
+        String partialIban = COUNTRY_CODE + "00" + bban;
+        int checkDigits = calculateCheckDigits(partialIban);
+        return COUNTRY_CODE + String.format("%02d", checkDigits) + bban;
     }
 
     public static boolean validateIban(String iban) {

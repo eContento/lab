@@ -60,6 +60,19 @@ class TransferServiceTest {
     }
 
     @Test
+    void shouldAllowTransferToExternalAccount() {
+        String externalBban = "12345678901234567890";
+        String externalIban = IbanUtils.generateIbanFromBban(externalBban);
+
+        Transfer transfer = transferService.executeTransfer(
+            source.iban, externalIban, BigDecimal.valueOf(200), "To external");
+
+        assertNotNull(transfer.id);
+        assertEquals(externalIban, transfer.targetAccountIban);
+        assertEquals(0, BigDecimal.valueOf(800).compareTo(accountService.getAccount(source.iban).balance));
+    }
+
+    @Test
     void shouldThrowWhenTransferToSameAccount() {
         assertThrows(IllegalArgumentException.class, () ->
             transferService.executeTransfer(source.iban, source.iban,

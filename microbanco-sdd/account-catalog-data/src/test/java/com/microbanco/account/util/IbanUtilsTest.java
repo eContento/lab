@@ -15,6 +15,17 @@ class IbanUtilsTest {
     }
 
     @Test
+    void shouldGenerateIbanWithEntityPrefix() {
+        String iban = IbanUtils.generateIban();
+        assertEquals(24, iban.length());
+        String bban = iban.substring(4);
+        assertTrue(bban.startsWith("00830001"));
+        assertEquals(20, bban.length());
+        String digits = bban.substring(8);
+        assertTrue(digits.matches("\\d{12}"));
+    }
+
+    @Test
     void shouldGenerateUniqueIbans() {
         String iban1 = IbanUtils.generateIban();
         String iban2 = IbanUtils.generateIban();
@@ -60,5 +71,24 @@ class IbanUtilsTest {
         String iban = IbanUtils.generateIban();
         String tampered = iban.substring(0, 2) + "00" + iban.substring(4);
         assertFalse(IbanUtils.validateIban(tampered));
+    }
+
+    @Test
+    void isEntityAccountShouldReturnTrueForEntityIban() {
+        String iban = IbanUtils.generateIban();
+        assertTrue(IbanUtils.isEntityAccount(iban));
+    }
+
+    @Test
+    void isEntityAccountShouldReturnFalseForExternalIban() {
+        String externalBban = "12345678901234567890";
+        String externalIban = IbanUtils.generateIbanFromBban(externalBban);
+        assertFalse(IbanUtils.isEntityAccount(externalIban));
+        assertTrue(IbanUtils.validateIban(externalIban));
+    }
+
+    @Test
+    void isEntityAccountShouldReturnFalseForNull() {
+        assertFalse(IbanUtils.isEntityAccount(null));
     }
 }

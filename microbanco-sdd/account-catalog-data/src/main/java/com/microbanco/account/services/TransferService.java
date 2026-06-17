@@ -32,14 +32,16 @@ public class TransferService {
 
         Account source = Account.<Account>findByIdOptional(sourceAccountIban)
             .orElseThrow(() -> new AccountNotFoundException(sourceAccountIban));
-        Account target = Account.<Account>findByIdOptional(targetAccountIban)
-            .orElseThrow(() -> new AccountNotFoundException(targetAccountIban));
 
         source.debit(amount);
-        target.credit(amount);
-
         source.persist();
-        target.persist();
+
+        if (IbanUtils.isEntityAccount(targetAccountIban)) {
+            Account target = Account.<Account>findByIdOptional(targetAccountIban)
+                .orElseThrow(() -> new AccountNotFoundException(targetAccountIban));
+            target.credit(amount);
+            target.persist();
+        }
 
         Transfer transfer = new Transfer(
             UUID.randomUUID(), sourceAccountIban, targetAccountIban,
